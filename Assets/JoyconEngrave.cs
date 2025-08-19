@@ -11,6 +11,23 @@ public class JoyconEngrave : MonoBehaviour
     public int gridSize = 10;
     public float voxelSpacing = 1f;
 
+
+    public float[] stick;
+    public Vector3 gyro;
+    public Vector3 accel;
+    public int jc_ind = 0;
+    public Quaternion orientation;
+
+    public Vector3 rot;
+    public float xx, yy, zz, stepCount;
+    public float ggyro;
+    public float aaccel;
+    public bool go;
+
+    public Rigidbody p;
+    public float _speed;
+
+
     void Start()
     {
         voxelGrid = new GameObject[gridSize, gridSize, gridSize];
@@ -29,9 +46,35 @@ public class JoyconEngrave : MonoBehaviour
 
     void Update()
     {
+        if (ggyro >= 20 && go == false)
+        {
+            stepCount += 1;
+            if (p)
+            {
+                p.AddRelativeForce(Vector3.forward * _speed);
+            }
+
+            go = true;
+        }
+
+        if (ggyro < 20 && go == true)
+        {
+            //stepCount += 1;
+            go = false;
+        }
+
+        // Debug.Log(new Vector2(joycons[jc_ind].GetStick()[0], joycons[jc_ind].GetStick()[1]));
+
         if (joycons.Count == 0) return;
 
         Joycon j = joycons[jcIndex];
+
+        if (j.GetButtonDown(Joycon.Button.SHOULDER_2))
+        {
+            Debug.Log("Shoulder button 2 pressed");
+            Debug.Log(string.Format("Stick x: {0:N} Stick y: {1:N}", j.GetStick()[0], j.GetStick()[1]));
+            j.Recenter();
+        }
 
         float[] stickArr = j.GetStick();
         Vector2 stick = new Vector2(stickArr[0], stickArr[1]);
@@ -43,6 +86,26 @@ public class JoyconEngrave : MonoBehaviour
         {
             CarveVoxel(x, y, z);
         }
+        
+        // stick = j.GetStick();
+
+            gyro = j.GetGyro();
+            accel = j.GetAccel();
+            orientation = j.GetVector();
+
+            rot = orientation.eulerAngles;
+            ggyro = (int)gyro.sqrMagnitude;
+            aaccel = (int)accel.sqrMagnitude;
+
+            if (j.GetButton(Joycon.Button.DPAD_UP))
+            {
+                gameObject.GetComponent<Renderer>().material.color = Color.red;
+            }
+            else
+            {
+                gameObject.GetComponent<Renderer>().material.color = Color.blue;
+            }
+            gameObject.transform.rotation = orientation;
     }
 
     void CarveVoxel(int x, int y, int z)
