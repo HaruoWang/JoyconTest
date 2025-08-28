@@ -150,6 +150,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jcIndex: 0
-  voxelPrefab: {fileID: 0}
-  gridSize: 10
-  voxelSpacing: 1
+  gridSize: 2
+  cubeSize: 1
+  stick: []
+  gyro: {x: 0, y: 0, z: 0}
+  accel: {x: 0, y: 0, z: 0}
+  jc_ind: 0
+  orientation: {x: 0, y: 0, z: 0, w: 0}
+  rot: {x: 0, y: 0, z: 0}
+  xx: 0
+  yy: 0
+  zz: 0
+  stepCount: 0
+  ggyro: 0
+  aaccel: 0
+  go: 0
+  p: {fileID: 0}
+  _speed: 0
